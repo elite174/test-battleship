@@ -1,0 +1,22 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --red: hsl(133, 78%, 64%);
+  --miss: hsl(189, 78%, 64%);
+  --hit: hsl(8, 78%, 64%);
+  --blue: hsl(208, 78%, 64%);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  font-family: sans-serif;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}

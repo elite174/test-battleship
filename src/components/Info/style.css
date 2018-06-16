@@ -1,0 +1,50 @@
+.info {
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+}
+
+.info__ships{
+    color: white;
+}
+
+.btn {
+    transition-property: transform, visibility;
+    transition-duration: 250ms;
+    cursor: pointer;
+    text-align: center;
+    text-transform: uppercase;
+    will-change: transform;
+    align-self: flex-start;
+    margin-bottom: 15px;
+    color: white;
+}
+
+.btn.disabled{
+    visibility: hidden;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.info__logo{
+    color: white;
+    font-size: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 60px;
+    width: auto;
+    padding-bottom: 10px;
+    border-bottom: 2px solid white;
+}
+
+.logo__icon{
+    font-size: 30px;
+    color: var(--blue);
+    margin-right: 20px;
+}
