@@ -10,15 +10,12 @@ class Controller {
         this.moves = generateMoves()
     }
 
+    /**
+     * Returns the number of alive ships
+     */
     @computed
     get aliveShips() {
         return this.grid.aliveShips
-    }
-    reset() {
-
-    }
-    play = () => {
-        this.fire()
     }
 
     fire = () => {

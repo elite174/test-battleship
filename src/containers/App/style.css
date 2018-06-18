@@ -28,6 +28,6 @@
     top: 0;
     left: 0;
     height: 50%;
-    background-color: var(--red);
+    background-color: var(--green);
     clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 0% 100%);
 }
