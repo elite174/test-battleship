@@ -39,10 +39,12 @@ class Info extends React.Component {
         document.removeEventListener('click', this.fire)
         document.removeEventListener('keydown', this.fire)
     }
-    render() {
+    componentDidUpdate() {
         if (this.props.controller.aliveShips === 0 && this.state.play) {
             this.pauseGame()
         }
+    }
+    render() {
         return <div className='info'>
             <div className='info__logo'>
                 <i className='material-icons logo__icon'>directions_boat</i>
@@ -51,6 +53,7 @@ class Info extends React.Component {
             <span className={this.props.controller.aliveShips === 0 ? 'btn disabled' : 'btn'} onClick={this.handleClick}>{this.state.play ? 'Stop' : 'Start'}</span>
             <div className='info__ships'>{`ALIVE SHIPS: ${this.props.controller.aliveShips}`}</div>
             <div className='info__ships'>PRESS SOMETHING TO FIRE</div>
+            {this.props.controller.aliveShips === 0 && <div className='info__ships info__ships--over'>GAME OVER</div>}
         </div>
     }
 }

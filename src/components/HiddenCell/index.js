@@ -15,7 +15,7 @@ const DotShip = observer(({ ship }) => {
 const IShip = observer(({ ship }) => {
     let style
     let x = ship.position.x + 1, y = ship.position.y + 1
-    switch (ship.rotation) {
+    switch (ship.rotation.toString()) {
         case 'left':
             style = {
                 gridRow: `${x} / span 1`,
@@ -47,7 +47,7 @@ const IShip = observer(({ ship }) => {
 const LShip = observer(({ ship }) => {
     let style, styleL
     let x = ship.position.x + 1, y = ship.position.y + 1
-    switch (ship.rotation) {
+    switch (ship.rotation.toString()) {
         case 'left':
             style = {
                 gridRow: `${x} / span 1`,

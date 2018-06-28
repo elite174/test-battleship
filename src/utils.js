@@ -9,10 +9,23 @@ export const random = (a, b) => {
     return a + Math.round(Math.random() * (b - a))
 }
 
+class Rotation {
+    constructor(str, val) {
+        this.str = str
+        this.val = val
+    }
+    toString() {
+        return this.str
+    }
+    valueOf() {
+        return this.val
+    }
+}
+
 /**
  * Set of rotations
  */
-export const Rotation = ['left', 'right', 'up', 'down']
+export const Rotations = [new Rotation('left', -1), new Rotation('right', 1), new Rotation('up', -1), new Rotation('down', 1)]
 
 export const ShipTypes = {
     DOT: 'dot',
@@ -20,7 +33,7 @@ export const ShipTypes = {
     I: 'I'
 }
 
-export const getRandomRotation = () => { return Rotation[random(0, Rotation.length - 1)] }
+export const getRandomRotation = () => { return Rotations[random(0, Rotation.length - 1)] }
 
 /**
  * Returns the moves for 1 game

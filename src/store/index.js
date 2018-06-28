@@ -6,8 +6,8 @@ import { generateMoves } from "../utils";
 class Controller {
     constructor() {
         this.grid = new GridModel(10)
-        this.grid.placeShips()
         this.moves = generateMoves()
+        this.grid.placeShips()
     }
 
     /**

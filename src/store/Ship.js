@@ -1,4 +1,5 @@
 import { observable, action, computed } from "mobx";
+import { ShipTypes } from "../utils";
 
 export default class Ship {
     constructor(type, rotation, cellCount) {
@@ -6,6 +7,13 @@ export default class Ship {
         this.rotation = rotation
         this.id = Math.random()
         this.cellCount = cellCount
+        if (type === ShipTypes.DOT) {
+            this.length = 1
+        } else if (type === ShipTypes.I) {
+            this.length = 4
+        } else {
+            this.length = 3
+        }
     }
 
     /**

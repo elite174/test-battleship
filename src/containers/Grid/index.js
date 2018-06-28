@@ -1,10 +1,10 @@
 import React from 'react'
 import './style.css'
-import GridCell from '../GridCell';
+import GridCell from '../../components/GridCell';
 import GridModel from '../../store/Grid';
 import { generateMoves } from '../../utils';
 import { inject, observer } from 'mobx-react';
-import HiddenCell from '../HiddenCell';
+import HiddenCell from '../../components/HiddenCell';
 
 
 /**
@@ -13,7 +13,7 @@ import HiddenCell from '../HiddenCell';
  */
 @inject('controller')
 @observer
-class Grid extends React.PureComponent {
+class Grid extends React.Component {
     constructor(props) {
         super(props)
         this.cells = []
@@ -41,7 +41,6 @@ class Grid extends React.PureComponent {
                     <div className='restart__button' onClick={() => document.location.reload()}>Restart</div>
                 </div>}
             </div>
-
         </div>
     }
 }
