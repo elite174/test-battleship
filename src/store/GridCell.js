@@ -8,8 +8,6 @@ export default class GridCellModel extends Cell {
 
     shipID = null
 
-    shipIsNear = false
-
     /**
      * status: empty, miss, hit
      */
@@ -19,10 +17,6 @@ export default class GridCellModel extends Cell {
     @action.bound
     setStatus(value) {
         this.status = value
-    }
-
-    setShipIsNear(value) {
-        this.shipIsNear = value
     }
 
     setShipId(id) {

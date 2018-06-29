@@ -1,5 +1,5 @@
 import GridModel from "./Grid";
-import { computed, observable } from "mobx";
+import { computed } from "mobx";
 import { generateMoves } from "../utils";
 
 

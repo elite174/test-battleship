@@ -1,7 +1,7 @@
 import { generateMoves, ShipTypes, getRandomRotation } from "../utils";
 import Ship from "./Ship";
 import GridCellModel from "./GridCell";
-import { observable, computed, action } from "mobx";
+import { computed } from "mobx";
 
 const DOT_COUNT = 2
 const I_COUNT = 1
@@ -69,7 +69,7 @@ export default class GridModel {
         if (matrixCell.shipID !== null) {
             let ship = this.ships.find(ship => { return ship.id === matrixCell.shipID })
             matrixCell.setStatus('hit')
-            ship.hit()
+            if (ship !== undefined) { ship.hit() }
         } else {
             matrixCell.setStatus('miss')
         }
@@ -94,9 +94,8 @@ export default class GridModel {
         let currentShip = this.ships[currentShipIndex]
         while (moves.length > 0) {
             cell = moves.pop()
-            if (this.checkOrMarkArea(cell, currentShip, true)) {
+            if (this.canPlaceShip(cell, currentShip)) {
                 this.placeShip(cell, currentShip)
-                this.checkOrMarkArea(cell, currentShip, false)
                 if (currentShipIndex + 1 === this.ships.length) {
                     break
                 } else {
@@ -108,7 +107,7 @@ export default class GridModel {
     }
 
     /**
-     * The function 
+     * Checks if it's possible to place a ship
      * part 1: check if it's possible to place the farest cell onto the grid
      * part 2: check if there is a ship overlapping with possible position
      * part 3: check if there is an overlap for L-ship "appendix"
@@ -116,7 +115,8 @@ export default class GridModel {
      * @param {Ship} ship 
      * @param {boolean} check
      */
-    checkOrMarkArea = (cell, ship, check = true) => {
+    canPlaceShip = (cell, ship) => {
+        // area boundaries
         let minX, maxX, minY, maxY
         minX = maxX = minY = maxY = 1
         switch (ship.rotation.toString()) {
@@ -134,30 +134,26 @@ export default class GridModel {
                 break
         }
         // part 1
-        if (check) {
-            if (ship.rotation.toString() === 'right' || ship.rotation.toString() === 'left') {
-                if (!this.isInsideGrid(cell.x, cell.y + ship.rotation * (ship.length - 1))) {
-                    return false
-                }
-                if (ship.type === ShipTypes.L && !this.isInsideGrid(cell.x - ship.rotation * 1, cell.y + 2 * ship.rotation)) {
-                    return false
-                }
-            } else {
-                if (!this.isInsideGrid(cell.x + ship.rotation * (ship.length - 1)), cell.y) {
-                    return false
-                }
-                if (ship.type === ShipTypes.L && !this.isInsideGrid(cell.x + ship.rotation * 2, cell.y + 1 * ship.rotation)) {
-                    return false
-                }
+        if (ship.rotation.toString() === 'right' || ship.rotation.toString() === 'left') {
+            if (!this.isInsideGrid(cell.x, cell.y + ship.rotation * (ship.length - 1))) {
+                return false
+            }
+            if (ship.type === ShipTypes.L && !this.isInsideGrid(cell.x - ship.rotation * 1, cell.y + 2 * ship.rotation)) {
+                return false
+            }
+        } else {
+            if (!this.isInsideGrid(cell.x + ship.rotation * (ship.length - 1)), cell.y) {
+                return false
+            }
+            if (ship.type === ShipTypes.L && !this.isInsideGrid(cell.x + ship.rotation * 2, cell.y + 1 * ship.rotation)) {
+                return false
             }
         }
         //part 2
         for (let i = cell.x - minX; i <= cell.x + maxX; i++) {
             for (let j = cell.y - minY; j <= cell.y + maxY; j++) {
-                if (check && this.isInsideGrid(i, j) && this.matrix[i][j].shipID !== null) {
+                if (this.isInsideGrid(i, j) && this.matrix[i][j].shipID !== null) {
                     return false
-                } else if (!check && this.isInsideGrid(i, j) && this.matrix[i][j].shipID === null) {
-                    this.matrix[i][j].setShipIsNear(true)
                 }
             }
         }
@@ -166,37 +162,29 @@ export default class GridModel {
             switch (ship.rotation.toString()) {
                 case 'left':
                     for (let j = cell.y - 1; j >= cell.y - ship.length; j--) {
-                        if (check && this.isInsideGrid(cell.x + (ship.length - 1), j) && this.matrix[cell.x + (ship.length - 1)][j].shipID !== null) {
+                        if (this.isInsideGrid(cell.x + (ship.length - 1), j) && this.matrix[cell.x + (ship.length - 1)][j].shipID !== null) {
                             return false
-                        } else if (!check && this.isInsideGrid(ship.position.x + (ship.length - 1), j) && this.matrix[ship.position.x + (ship.length - 1)][j].shipID === null) {
-                            this.matrix[ship.position.x + (ship.length - 1)][j].setShipIsNear(true)
                         }
                     }
                     break
                 case 'right':
                     for (let j = cell.y + 1; j <= cell.y + ship.length; j++) {
-                        if (check && this.isInsideGrid(cell.x - (ship.length - 1), j) && this.matrix[cell.x - (ship.length - 1)][j].shipID !== null) {
+                        if (this.isInsideGrid(cell.x - (ship.length - 1), j) && this.matrix[cell.x - (ship.length - 1)][j].shipID !== null) {
                             return false
-                        } else if (!check && this.isInsideGrid(cell.x - (ship.length - 1), j) && this.matrix[cell.x - (ship.length - 1)][j].shipID === null) {
-                            this.matrix[ship.position.x - (ship.length - 1)][j].setShipIsNear(true)
                         }
                     }
                     break
                 case 'up':
                     for (let i = cell.x - 1; i >= cell.x - ship.length; i--) {
-                        if (check && this.isInsideGrid(i, cell.y - (ship.length - 1)) && this.matrix[i][cell.y - (ship.length - 1)].shipID !== null) {
+                        if (this.isInsideGrid(i, cell.y - (ship.length - 1)) && this.matrix[i][cell.y - (ship.length - 1)].shipID !== null) {
                             return false
-                        } else if (!check && this.isInsideGrid(i, ship.position.y - (ship.length - 1)) && this.matrix[i][ship.position.y - (ship.length - 1)].shipID === null) {
-                            this.matrix[i][ship.position.y - (ship.length - 1)].setShipIsNear(true)
                         }
                     }
                     break
                 case 'down':
                     for (let i = cell.x + 1; i <= cell.x + ship.length; i++) {
-                        if (check && this.isInsideGrid(i, cell.y + (ship.length - 1)) && this.matrix[i][cell.y + (ship.length - 1)].shipID === null) {
+                        if (this.isInsideGrid(i, cell.y + (ship.length - 1)) && this.matrix[i][cell.y + (ship.length - 1)].shipID === null) {
                             return false
-                        } else if (!check && this.isInsideGrid(i, ship.position.y + (ship.length - 1)) && this.matrix[i][ship.position.y + (ship.length - 1)].shipID == null) {
-                            this.matrix[i][ship.position.y + (ship.length - 1)].setShipIsNear(true)
                         }
                     }
                     break
@@ -217,7 +205,6 @@ export default class GridModel {
                     this.matrix[cell.x][j].setShipId(ship.id)
                 }
                 if (ship.type === ShipTypes.L) {
-                    console.log(cell.x - 1, cell.y + 2)
                     this.matrix[cell.x - 1][cell.y + 2].setShipId(ship.id)
                 }
                 ship.setPosition(cell)
@@ -227,7 +214,6 @@ export default class GridModel {
                     this.matrix[cell.x][j].setShipId(ship.id)
                 }
                 if (ship.type === ShipTypes.L) {
-                    console.log(cell.x + 1, cell.y - 2)
                     this.matrix[cell.x + 1][cell.y - 2].setShipId(ship.id)
                 }
                 ship.setPosition(cell)
@@ -237,7 +223,6 @@ export default class GridModel {
                     this.matrix[i][cell.y].setShipId(ship.id)
                 }
                 if (ship.type === ShipTypes.L) {
-                    console.log(cell.x - 2, cell.y - 1)
                     this.matrix[cell.x - 2][cell.y - 1].setShipId(ship.id)
                 }
                 ship.setPosition(cell)
@@ -247,7 +232,6 @@ export default class GridModel {
                     this.matrix[i][cell.y].setShipId(ship.id)
                 }
                 if (ship.type === ShipTypes.L) {
-                    console.log(cell.x + 2, cell.y + 1)
                     this.matrix[cell.x + 2][cell.y + 1].setShipId(ship.id)
                 }
                 ship.setPosition(cell)

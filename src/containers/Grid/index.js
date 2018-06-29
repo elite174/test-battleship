@@ -1,8 +1,6 @@
 import React from 'react'
 import './style.css'
 import GridCell from '../../components/GridCell';
-import GridModel from '../../store/Grid';
-import { generateMoves } from '../../utils';
 import { inject, observer } from 'mobx-react';
 import HiddenCell from '../../components/HiddenCell';
 

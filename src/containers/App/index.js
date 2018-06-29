@@ -1,5 +1,5 @@
 import React from 'react'
-import Grid from '../../components/Grid';
+import Grid from '../Grid';
 import './style.css'
 import Info from '../../components/Info';
 import { Provider } from 'mobx-react'

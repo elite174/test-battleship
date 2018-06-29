@@ -3,10 +3,6 @@
     background-color: red;
     box-shadow: 0 0 20px red;
     opacity: 0;
-    animation-name: appearCell;
-    animation-delay: 500ms;
-    animation-duration: 500ms;
-    animation-fill-mode: forwards;
 }
 
 .hidden-cell.active {
